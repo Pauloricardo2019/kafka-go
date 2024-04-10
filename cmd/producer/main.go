@@ -9,9 +9,10 @@ import (
 func main() {
 	deliveryChan := make(chan kafka.Event)
 	producer := NewKafkaProducer()
-	Publish("transferiu", "teste", producer, []byte("transferecia2"), deliveryChan)
+	Publish("transferiu", "teste", producer, []byte("transferecia2") /*Quando passado nil ele vai para qualquer uma das partições*/, deliveryChan)
 	//DeliveryReport(deliveryChan) // async
 
+	//Delivery é importante para validar se a mensagem foi publicada com sucesso
 	e := <-deliveryChan
 	msg := e.(*kafka.Message)
 	if msg.TopicPartition.Error != nil {
